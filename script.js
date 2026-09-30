@@ -9,32 +9,37 @@ async function downloadMedia(type) {
 
     resultDiv.innerHTML = "Processing your request, please wait...";
 
+    // Free public API alternative (Cobalt API / similar direct downloader)
     try {
-        let response = await fetch(`https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink?url=${encodeURIComponent(url)}`, {
-            method: 'GET',
+        let response = await fetch("https://co.wuk.sh/api/json", {
+            method: "POST",
             headers: {
-                'X-RapidAPI-Key': '92bc916b73msha871add334ec460p1b4cc2jsn81b3a117f9ce',
-                'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com'
-            }
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                url: url,
+                isAudioOnly: type === 'mp3'
+            })
         });
-        
+
         let data = await response.json();
         console.log(data);
-        
-        if (data && (data.url || (data.medias && data.medias.length > 0))) {
-            let downloadLink = data.url ? data.url : data.medias[0].url;
-            
-            if (type === 'mp3' && data.medias) {
-                let audioMedia = data.medias.find(m => m.audio_only || m.extension === 'mp3');
-                if (audioMedia) downloadLink = audioMedia.url;
-            }
 
+        if (data && data.status === "redirect" || data.url) {
+            let downloadLink = data.url || data.picker[0].url;
             resultDiv.innerHTML = `<a href="${downloadLink}" target="_blank" download>👉 Click Here to Download Your File</a>`;
+        } else if (data && data.status === "picker") {
+            let linksHtml = "<h4>Select to download:</h4>";
+            data.picker.forEach(item => {
+                linksHtml += `<a href="${item.url}" target="_blank" download style="display:block; margin:5px 0;">Download (${item.type || 'Media'})</a>`;
+            });
+            resultDiv.innerHTML = linksHtml;
         } else {
-            resultDiv.innerHTML = "Could not find any downloadable link. Please check the URL or try another link.";
+            resultDiv.innerHTML = "Could not process this URL. Try another link.";
         }
     } catch (error) {
         console.error(error);
-        resultDiv.innerHTML = "An error occurred while processing. Try again later.";
+        resultDiv.innerHTML = "An error occurred. Please check the URL and try again.";
     }
 }
