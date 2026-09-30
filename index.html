@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All in One Social Media Video Downloader & YouTube to MP3 Converter</title>
+    <meta name="description" content="Free online downloader to download videos from Instagram, TikTok, YouTube, and convert YouTube videos to MP3 easily and fast.">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 400;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .ad-space {
+            width: 100%;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #ffffff;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        #result a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #result a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Ad Space -->
+        <div class="ad-space">Advertisement Space (Header)</div>
+
+        <h1>All-in-One Social Media Downloader</h1>
+        <h2>Download Instagram, TikTok, YouTube videos and convert YouTube to MP3 instantly.</h2>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Paste your video or audio link here...">
+        </div>
+
+        <div class="button-grid">
+            <button onclick="downloadMedia('instagram')">Instagram Download</button>
+            <button onclick="downloadMedia('tiktok')">TikTok Download</button>
+            <button onclick="downloadMedia('youtube')">YouTube Video</button>
+            <button onclick="downloadMedia('mp3')">YouTube to MP3</button>
+        </div>
+
+        <!-- Middle Ad Space -->
+        <div class="ad-space">Advertisement Space (Content)</div>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
