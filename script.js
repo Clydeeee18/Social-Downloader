@@ -1,41 +1,48 @@
 async function downloadMedia(type) {
-    const url = document.getElementById('urlInput').value;
-    const resultDiv = document.getElementById('result');
-    
-    if (!url) {
-        alert("Please paste a valid link first!");
-        return;
+  const url = document.getElementById('urlInput').value.trim();
+  const resultDiv = document.getElementById('result');
+  if (!url) { alert("Link paste phawt rawh!"); return; }
+
+  resultDiv.textContent = "Processing...";
+
+  try {
+    const response = await fetch(
+      `https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-RapidAPI-Key': 'KEY_THAR_HETAH',
+          'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com'
+        },
+        body: JSON.stringify({ url })
+      }
+    );
+
+    const data = await response.json();
+    console.log(response.status, data);
+
+    if (!response.ok) {
+      resultDiv.textContent = `Error ${response.status}: ${data.message || 'Unknown'}`;
+      return;
     }
 
-    resultDiv.innerHTML = "Processing your request, please wait...";
+    const root = data.data || data;
+    const medias = root.medias || root.links || [];
+    let link = root.url || (medias[0] && medias[0].url);
 
-    try {
-        let response = await fetch(`https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink?url=${encodeURIComponent(url)}`, {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': '7838030718mish69a9736c708802bp18d048jnn58ce3ede2c67',
-                'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com'
-            }
-        });
-        
-        let data = await response.json();
-        console.log(data); // Console-ah data a lut em tih en nan
-        
-        // API response structure ang zira check-na
-        if (data && (data.url || (data.medias && data.medias.length > 0))) {
-            let downloadLink = data.url ? data.url : data.medias[0].url;
-            
-            if (type === 'mp3' && data.medias) {
-                let audioMedia = data.medias.find(m => m.audio_only || m.extension === 'mp3');
-                if (audioMedia) downloadLink = audioMedia.url;
-            }
-
-            resultDiv.innerHTML = `<a href="${downloadLink}" target="_blank" download>👉 Click Here to Download Your File</a>`;
-        } else {
-            resultDiv.innerHTML = "Could not find any downloadable link. Please check the URL or try another link.";
-        }
-    } catch (error) {
-        console.error(error);
-        resultDiv.innerHTML = "An error occurred while processing. Try again later.";
+    if (type === 'mp3') {
+      const a = medias.find(m => m.audio_only || m.type === 'audio' || m.extension === 'mp3');
+      if (a) link = a.url;
     }
+
+    if (link) {
+      resultDiv.innerHTML = `<a href="${link}" target="_blank" rel="noopener">👉 Download</a>`;
+    } else {
+      // raw response lantir, en theih nan
+      resultDiv.textContent = "Link hmuh loh. Response: " + JSON.stringify(data).slice(0, 300);
+    }
+  } catch (e) {
+    resultDiv.textContent = "Error: " + e.message;
+  }
 }
