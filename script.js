@@ -13,7 +13,7 @@ async function downloadMedia(type) {
         let response = await fetch(`https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink?url=${encodeURIComponent(url)}`, {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': 'I_API_KEY_HETA_HI_DAH_RAWH', // I RapidAPI key dik tak dah rawh
+                'X-RapidAPI-Key': '7838030718mish69a9736c708802bp18d048jnn58ce3ede2c67', //[span_1](start_span)[span_1](end_span)
                 'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com'
             }
         });
@@ -21,11 +21,9 @@ async function downloadMedia(type) {
         let data = await response.json();
         
         if (data && data.medias && data.medias.length > 0) {
-            // Type azira link thlan chhuah na
             let downloadLink = data.medias[0].url;
             
             if (type === 'mp3') {
-                // Audio format zawngtu tan (API-in audio a support chuan)
                 let audioMedia = data.medias.find(m => m.audio_only || m.extension === 'mp3');
                 if (audioMedia) downloadLink = audioMedia.url;
             }
